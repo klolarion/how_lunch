@@ -34,10 +34,8 @@ public class GroupController extends HttpServlet {
         int days = Integer.parseInt(req.getParameter("days"));
         int teamSize = Integer.parseInt(req.getParameter("teamSize"));
 
-        System.out.println("111");
         List<LunchTeam> teams = groupService.generateTeams(playerNumber, days, teamSize);
 
-        System.out.println("222");
         req.setAttribute("teams", teams);
         req.getRequestDispatcher("/WEB-INF/views/group.jsp").forward(req, resp);
     }

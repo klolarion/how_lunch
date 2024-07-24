@@ -10,20 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45eb3c2e-c40b-4d69-8a6f-dfaafc5c7b81" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/util/lunch_mate/LunchMate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/util/lunch_mate/LunchTeam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/HomeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/AuthController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/BankController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/BankController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/dao/GroupDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/dao/GroupDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/dao/UserDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/security/filter/AuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/security/filter/AuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/GroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/controller/GroupController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/service/GroupServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/service/GroupServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/how_lunch/service/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,8 +25,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="Jsp File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -94,6 +85,7 @@
   </component>
   <component name="RunManager">
     <configuration name="Tomcat 9.0.91" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.91" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/bank" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="how_lunch:war exploded">
@@ -193,7 +185,7 @@
       <workItem from="1721286502299" duration="22952000" />
       <workItem from="1721622833119" duration="393000" />
       <workItem from="1721624355206" duration="19157000" />
-      <workItem from="1721704316459" duration="35300000" />
+      <workItem from="1721704316459" duration="36161000" />
     </task>
     <servers />
   </component>
