@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,16 +48,28 @@ public class BankController extends HttpServlet {
             if(p != null) {
                 page = Integer.parseInt(p);
             }
-
+            String username = "";
             List<UserInfoDto> accounts = accountService.getAllAccounts(userId);
+            if(accounts.isEmpty()){
+                username = accountService.getUserInfo(userId);
+            }
             List<Transaction> transactions = accountService.getMyAllTransactions(userId, page, PAGE_SIZE, order);
+            if (accounts == null) {
+                accounts = new ArrayList<>();
+            }
+            if (transactions == null) {
+                transactions = new ArrayList<>();
+            }
+
+
             int totalTransactions = accountService.getMyTransactionCount(userId);
             int totalPages = (int) Math.ceil((double) totalTransactions / PAGE_SIZE);
 
 
             req.setAttribute("userId", userId);
             req.setAttribute("accounts", accounts);
-            req.setAttribute("username", accounts.get(0).getUsername());
+            req.setAttribute("username", accounts.isEmpty() ? username : accounts.get(0).getUsername());
+
 
             req.setAttribute("transactions", transactions);
             req.setAttribute("currentPage", page);

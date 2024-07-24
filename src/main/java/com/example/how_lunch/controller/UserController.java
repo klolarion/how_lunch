@@ -26,6 +26,29 @@ public class UserController extends HttpServlet {
         } else if (path.equals("/register")) {
             req.getRequestDispatcher(BASEPATH + "/register.jsp").forward(req, resp);
         } else if (path.equals("/logout")) {
+            Cookie[] cookies = req.getCookies();
+            String userId = "";
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("UID".equals(cookie.getName())) {
+                        userId = cookie.getValue();
+                        break;
+                    }
+                }
+            }
+            Cookie token = new Cookie("accessToken", "인증토큰");
+            token.setHttpOnly(true);
+            token.setMaxAge(0);
+            token.setPath("/");
+
+            Cookie UID = new Cookie("UID", userId);
+            UID.setHttpOnly(true);
+            UID.setMaxAge(0);
+            UID.setPath("/");
+
+            resp.addCookie(token);
+            resp.addCookie(UID);
+
             HttpSession session = req.getSession();
             session.invalidate(); // 세션 무효화
             resp.sendRedirect(req.getContextPath() + "/user/login");
@@ -69,17 +92,23 @@ public class UserController extends HttpServlet {
                 req.getRequestDispatcher(BASEPATH + "/login.jsp").forward(req, resp);
             }
         } else if (path.equals("/doRegister")) {
+
             String username = req.getParameter("username");
             String password = req.getParameter("password");
+            String rePassword = req.getParameter("rePassword");
             String email = req.getParameter("email");
 
-
-            Users user = new Users();
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setEmail(email);
-            userService.newUser(user);
-            resp.sendRedirect(req.getContextPath() + "/user/login");
+            if (password.equals(rePassword)) {
+                Users user = new Users();
+                user.setUsername(username);
+                user.setPassword(password);
+                user.setEmail(email);
+                userService.newUser(user);
+                resp.sendRedirect(req.getContextPath() + "/user/login");
+            } else {
+                req.setAttribute("error", "Invalid username or password");
+                req.getRequestDispatcher(BASEPATH + "/register.jsp").forward(req, resp);
+            }
         }
     }
 }

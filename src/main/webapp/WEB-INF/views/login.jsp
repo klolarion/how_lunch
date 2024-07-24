@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="taglib.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +9,19 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
+            font-family: Arial, sans-serif;
             background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
         }
-        .header {
-            padding: 10px;
+        /* Link Styles */
+        a {
+            color: #6c757d;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #333333;
+            text-decoration: none;
         }
         .main {
             flex: 1;
@@ -61,10 +71,9 @@
     </style>
 </head>
 <body>
-<div class="header">
+<div style="text-align: center">
     <%@ include file="header.jsp" %>
 </div>
-
 <div class="main">
     <div class="login-container">
         <h2>Login</h2>

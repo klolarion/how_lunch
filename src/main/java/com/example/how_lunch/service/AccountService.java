@@ -2,6 +2,7 @@ package com.example.how_lunch.service;
 
 import com.example.how_lunch.dto.UserInfoDto;
 import com.example.how_lunch.model.Transaction;
+import com.example.how_lunch.model.Users;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public interface AccountService {
 
     void newAccount(long userId, String accountNumber);
     List<UserInfoDto> getAllAccounts(long id);
+    String getUserInfo(long id);
     UserInfoDto getAccount(long id, String accountNumber);
     List<Transaction> getAccountTransactions(long userId, String accountNumber, int page, int pageSize, String order);
     List<Transaction> getMyAllTransactions(long userId, int page, int pageSize, String order);

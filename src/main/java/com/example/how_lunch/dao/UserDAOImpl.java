@@ -20,6 +20,26 @@ import java.util.Map;
 public class UserDAOImpl implements UserDAO {
 
 
+    @Override
+    public String getUserInfo(long id) {
+        Connection conn = DBUtil.getConnection();
+        String sql = "select username from users where userId = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            String username = "";
+            while (rs.next()){
+                username = rs.getString("username");
+            }
+            return username;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        DBUtil.closeConnection();
+        return null;
+    }
+
     /*가입 - 이름(String), 이메일(String), 비밀번호(String)*/
     @Override
     public void newUser(Users user) {

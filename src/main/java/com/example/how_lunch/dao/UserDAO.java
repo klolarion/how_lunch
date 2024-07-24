@@ -10,6 +10,8 @@ import java.util.Map;
  * */
 
 public interface UserDAO {
+    String getUserInfo(long id);
+
     void newUser(Users user);
     Map<String, String> login(String email, String password);
     int changePassword(String username, String cPassword, String nPassword);

@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="taglib.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,13 +9,20 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
+            font-family: Arial, sans-serif;
             background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
         }
-
-        .header {
-            padding: 10px;
+        /* Link Styles */
+        a {
+            color: #6c757d;
+            text-decoration: none;
         }
-
+        a:hover {
+            color: #333333;
+            text-decoration: none;
+        }
         .main {
             flex: 1;
             display: flex;
@@ -69,7 +77,7 @@
     </style>
 </head>
 <body>
-<div class="header">
+<div style="text-align: center">
     <%@ include file="header.jsp" %>
 </div>
 <div class="main">
@@ -80,10 +88,10 @@
                 <input type="text" class="form-control" placeholder="Enter name" id="username" name="username" required>
                 <input type="email" class="form-control" placeholder="Enter email" id="email" name="email" required>
                 <input type="password" class="form-control" placeholder="Enter password" id="password" name="password" required>
+                <input type="password" class="form-control" placeholder="Re-enter password" id="rePassword" name="rePassword" required>
             </div>
             <div class="btn-group">
                 <button type="submit" value="Register" class="btn btn-custom">회원가입</button>
-                <a href="${pageContext.request.contextPath}/user/login" class="btn btn-secondary btn-custom">로그인</a>
             </div>
         </form>
     </div>
@@ -93,5 +101,6 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 </body>
 </html>

@@ -1,11 +1,9 @@
 package com.example.how_lunch.service;
 
-import com.example.how_lunch.dao.AccountDAO;
-import com.example.how_lunch.dao.AccountDAOImpl;
-import com.example.how_lunch.dao.TransactionDAO;
-import com.example.how_lunch.dao.TransactionDAOImpl;
+import com.example.how_lunch.dao.*;
 import com.example.how_lunch.dto.UserInfoDto;
 import com.example.how_lunch.model.Transaction;
+import com.example.how_lunch.model.Users;
 
 import java.util.List;
 
@@ -17,6 +15,7 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService{
     private AccountDAO accountDAO = new AccountDAOImpl();
     private TransactionDAO transactionDAO = new TransactionDAOImpl();
+    private UserDAO userDAO = new UserDAOImpl();
 
     @Override
     public void newAccount(long userId, String accountNumber) {
@@ -26,6 +25,11 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public List<UserInfoDto> getAllAccounts(long userId) {
         return accountDAO.getAllAccounts(userId);
+    }
+
+    @Override
+    public String getUserInfo(long id) {
+        return userDAO.getUserInfo(id);
     }
 
     @Override
