@@ -11,7 +11,8 @@
 <h1>Deposit</h1>
 <p>My account : ${accountNumber}</p>
 <p>Current balance : ${balance}</p>
-<form action="${pageContext.request.contextPath}/bank/view?path=doDeposit&accountNumber=${accountNumber}&userId=1" method="post">
+<form action="${pageContext.request.contextPath}/bank/view?path=doDeposit" method="post">
+    <input name="accountNumber" value="${accountNumber}" hidden>
     Amount : <input name="amount"><br>
     <input type="submit" value="Submit">
 

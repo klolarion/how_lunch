@@ -10,8 +10,7 @@
 <body>
 
 
-<h1>My info</h1>
-<p>Name : ${username}</p>
+<h1>Name : ${username}</h1>
 <p></p>
 <table border="1">
     <tr>
@@ -39,6 +38,16 @@
 </table>
 
 <br>
+
+<p>New account</p>
+<form action="${pageContext.request.contextPath}/account/view?path=newAccount" method="post">
+    Account number1 : <input name="accountNumber1" maxlength="3" placeholder="000"><br>
+    Account number2 : <input name="accountNumber2" maxlength="3" placeholder="000"><br>
+    Account number3 : <input name="accountNumber3" maxlength="3" placeholder="000"><br>
+    <input type="submit" value="Submit">
+</form>
+
+
 <br>
 <br>
 

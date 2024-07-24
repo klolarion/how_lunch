@@ -40,7 +40,7 @@ public class UserController extends HttpServlet {
             String email = req.getParameter("email");
             String password = req.getParameter("password");
 
-            Map<String, String> result = userService.login(email, password); // 로그인 성공 여부 확인
+            Map<String, String> result = userService.login(email, password);
 
             boolean success = false;
             String userId = "";

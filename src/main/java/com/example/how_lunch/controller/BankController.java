@@ -32,6 +32,7 @@ public class BankController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getParameter("path");
+        long userId = Long.parseLong((String) req.getAttribute("UID"));
 
         String o = req.getParameter("order");
         String order = "desc";
@@ -41,7 +42,6 @@ public class BankController extends HttpServlet {
 
 
         if (path == null) {
-            long userId = Long.parseLong((String) req.getAttribute("UID"));
             int page = 1;
             String p = req.getParameter("page");
             if(p != null) {
@@ -92,13 +92,13 @@ public class BankController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getParameter("path");
+        long userId = Long.parseLong((String) req.getAttribute("UID"));
 
 
         if(path.equals("doDeposit")){
             String accountNumber = req.getParameter("accountNumber");
             String amount = req.getParameter("amount");
             req.setAttribute("accountNumber", accountNumber);
-            long userId = Long.parseLong(req.getParameter("userId"));
 
             bankService.deposit(userId, accountNumber, Double.parseDouble(amount));
             resp.sendRedirect("/bank");
@@ -106,7 +106,7 @@ public class BankController extends HttpServlet {
             String accountNumber = req.getParameter("accountNumber");
 
             String amount = req.getParameter("amount");
-            long userId = Long.parseLong(req.getParameter("userId"));
+
             req.setAttribute("accountNumber", accountNumber);
 
             bankService.withdraw(userId, accountNumber, Double.parseDouble(amount));
@@ -116,7 +116,6 @@ public class BankController extends HttpServlet {
             double amount = Double.parseDouble(req.getParameter("amount"));
             String myAccountNum = req.getParameter("myAccountNum");
             String targetAccountNum = req.getParameter("targetAccountNum");
-            long userId = Long.parseLong(req.getParameter("userId"));
 
             bankService.transfer(userId, amount, myAccountNum, targetAccountNum);
             resp.sendRedirect("/bank");

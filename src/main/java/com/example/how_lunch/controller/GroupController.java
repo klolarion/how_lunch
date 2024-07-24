@@ -37,6 +37,6 @@ public class GroupController extends HttpServlet {
         List<LunchTeam> teams = groupService.generateTeams(playerNumber, days, teamSize);
 
         req.setAttribute("teams", teams);
-        req.getRequestDispatcher("/WEB-INF/views/group.jsp").forward(req, resp);
+        req.getRequestDispatcher(BASEPATH + "/group.jsp").forward(req, resp);
     }
 }

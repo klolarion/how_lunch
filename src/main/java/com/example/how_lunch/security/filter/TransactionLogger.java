@@ -2,8 +2,10 @@ package com.example.how_lunch.security.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @WebFilter("/*")
 public class TransactionLogger implements Filter {
@@ -16,15 +18,21 @@ public class TransactionLogger implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String path = httpRequest.getParameter("path");
-        String UId = httpRequest.getParameter("userId");
-        long userId = 0L;
 
-        if (UId != null) {
-            try {
-                userId = Long.parseLong(UId);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid userId format: " + UId);
+        String UID = null;
+
+        Cookie[] cookies = httpRequest.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("UID".equals(cookie.getName())) {
+                    UID = cookie.getValue();
+                }
             }
+        }
+        String userId = "";
+
+        if (UID != null) {
+            userId = UID;
         }
 
         if (path == null) {
@@ -33,14 +41,15 @@ public class TransactionLogger implements Filter {
         }
 
         if (path.contains("doDeposit")) {
-            System.out.println("[User ID : " + userId + "] Deposit Request");
+            System.out.println("[User ID : " + userId + "] Deposit Request - " + LocalDateTime.now());
         } else if (path.contains("doWithdraw")) {
-            System.out.println("[User ID : " + userId + "] Withdraw Request");
+            System.out.println("[User ID : " + userId + "] Withdraw Request - " + LocalDateTime.now());
         } else if (path.contains("doTransfer")) {
-            System.out.println("[User ID : " + userId + "] Transfer Request");
+            System.out.println("[User ID : " + userId + "] Transfer Request - " + LocalDateTime.now());
+        } else if (path.contains("newAccount")) {
+            System.out.println("[User ID : " + userId + "] New account Request - " + LocalDateTime.now());
         }
 
-        // 다음 필터 또는 서블릿 호출
         chain.doFilter(request, response);
     }
 }

@@ -11,7 +11,8 @@
 <h1>Withdraw</h1>
 <p>My account : ${accountNumber}</p><br>
 <p>Current balance : ${balance}</p>
-<form action="${pageContext.request.contextPath}/bank/view?path=doWithdraw&accountNumber=${accountNumber}&userId=1" method="post">
+<form action="${pageContext.request.contextPath}/bank/view?path=doWithdraw" method="post">
+    <input name="accountNumber" value="${accountNumber}" hidden>
   Amount : <input name="amount"><br>
   <input type="submit" value="Submit">
 </form>

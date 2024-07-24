@@ -17,12 +17,11 @@ import java.util.List;
 
 /**
  * 최초생성 2024.07.23 - 김재근
- * */
+ * * */
 
 @WebServlet("/account/*")
 public class AccountController extends HttpServlet {
     private final String BASEPATH = "/WEB-INF/views";
-
     private static final int PAGE_SIZE = 10;
     private AccountService accountService = new AccountServiceImpl();
     private BankService bankService = new BankServiceImpl();
@@ -65,5 +64,22 @@ public class AccountController extends HttpServlet {
 
             req.getRequestDispatcher(BASEPATH + "/accountView.jsp").forward(req, resp);
         }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String path = req.getParameter("path");
+        String accountNumber1 = req.getParameter("accountNumber1");
+        String accountNumber2 = req.getParameter("accountNumber2");
+        String accountNumber3 = req.getParameter("accountNumber3");
+        String userId = (String) req.getAttribute("UID");
+
+        String accountNumber = accountNumber1 + "-" + accountNumber2 + "-"+ accountNumber3;
+
+        if(path.equals("newAccount")) {
+            accountService.newAccount(Long.parseLong(userId), accountNumber);
+        }
+
+        resp.sendRedirect("/bank");
     }
 }

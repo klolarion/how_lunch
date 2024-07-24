@@ -155,32 +155,6 @@ public class TransactionDAOImpl implements TransactionDAO {
     /*내 거래목록 전체 조회 - 유저아이디(long)*/
     @Override
     public List<Transaction> getMyAllTransactions(long userId, int page, int pageSize, String order) {
-//        List<Transaction> result = new ArrayList<>();
-//
-//        Connection conn = DBUtil.getConnection();
-//        String sql = "select * from transactions where userId = ? order by regDate desc";
-//        try {
-//            PreparedStatement ps = conn.prepareStatement(sql);
-//            ps.setLong(1, userId);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Transaction transaction = new Transaction();
-//                transaction.setTransactionId(rs.getLong("transactionId"));
-//                transaction.setType(rs.getString("type"));
-//                transaction.setAmount(rs.getDouble("amount"));
-//                transaction.setMainAccount(rs.getString("mainAccount"));
-//                transaction.setTargetAccount(rs.getString("targetAccount"));
-//                transaction.setRegDate(rs.getTimestamp("regDate").toLocalDateTime());
-//
-//                result.add(transaction);
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        DBUtil.closeConnection();
-//
-//        return result;
 
         List<Transaction> transactions = new ArrayList<>();
         Connection conn = DBUtil.getConnection();
