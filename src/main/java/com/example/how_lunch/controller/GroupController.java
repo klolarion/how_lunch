@@ -2,7 +2,7 @@ package com.example.how_lunch.controller;
 
 import com.example.how_lunch.service.GroupService;
 import com.example.how_lunch.service.GroupServiceImpl;
-import org.groom.io.how_lunch.LunchTeam;
+import com.example.how_lunch.util.lunch_mate.LunchTeam;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

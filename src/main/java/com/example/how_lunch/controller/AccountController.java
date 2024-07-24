@@ -39,7 +39,7 @@ public class AccountController extends HttpServlet {
         }
 
         if (path == null) {
-            long userId = 1L;
+            long userId = Long.parseLong((String) req.getAttribute("UID"));
             int page = 1;
             String p = req.getParameter("page");
             if (p != null) {

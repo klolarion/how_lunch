@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.Map;
 
 @WebServlet("/user/*")
 public class UserController extends HttpServlet {
@@ -19,9 +20,7 @@ public class UserController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("doGet");
         String path = req.getPathInfo();
-        System.out.println("Path: " + path);
         if (path == null || path.equals("/login")) {
             req.getRequestDispatcher(BASEPATH + "/login.jsp").forward(req, resp);
         } else if (path.equals("/register")) {
@@ -35,21 +34,35 @@ public class UserController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("doPost");
         String path = req.getPathInfo();
-        System.out.println("Path: " + path);
 
         if (path.equals("/doLogin")) {
             String email = req.getParameter("email");
             String password = req.getParameter("password");
 
-            boolean success = userService.login(email, password); // 로그인 성공 여부 확인
+            Map<String, String> result = userService.login(email, password); // 로그인 성공 여부 확인
 
-            System.out.println("login success : " + success);
-
+            boolean success = false;
+            String userId = "";
+            if(result != null) {
+                success = Boolean.parseBoolean(result.get("success"));
+                userId = result.get("userId");
+            }
             if (success) {
-                HttpSession session = req.getSession();
-                session.setAttribute("email", email);
+                //토큰추가
+                Cookie token = new Cookie("accessToken", "인증토큰");
+                token.setHttpOnly(true);
+                token.setMaxAge(60 * 60 * 24);
+                token.setPath("/");
+
+                Cookie UID = new Cookie("UID", userId);
+                UID.setHttpOnly(true);
+                UID.setMaxAge(60 * 60 * 24);
+                UID.setPath("/");
+
+                resp.addCookie(token);
+                resp.addCookie(UID);
+
                 resp.sendRedirect(req.getContextPath() + "/bank");
             } else {
                 req.setAttribute("error", "Invalid credentials");
@@ -59,6 +72,7 @@ public class UserController extends HttpServlet {
             String username = req.getParameter("username");
             String password = req.getParameter("password");
             String email = req.getParameter("email");
+
 
             Users user = new Users();
             user.setUsername(username);

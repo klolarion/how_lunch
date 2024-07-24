@@ -9,10 +9,12 @@ import com.example.how_lunch.service.BankServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -24,7 +26,6 @@ import java.util.List;
 public class BankController extends HttpServlet {
 
     private final String BASEPATH = "/WEB-INF/views";
-
     private static final int PAGE_SIZE = 10;
     private AccountService accountService = new AccountServiceImpl();
     private BankService bankService = new BankServiceImpl();
@@ -38,8 +39,9 @@ public class BankController extends HttpServlet {
             order = o;
         }
 
+
         if (path == null) {
-            long userId = 1L;
+            long userId = Long.parseLong((String) req.getAttribute("UID"));
             int page = 1;
             String p = req.getParameter("page");
             if(p != null) {

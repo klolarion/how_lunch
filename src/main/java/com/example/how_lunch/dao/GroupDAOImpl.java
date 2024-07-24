@@ -2,6 +2,9 @@ package com.example.how_lunch.dao;
 
 
 
+import com.example.how_lunch.util.lunch_mate.LunchMate;
+import com.example.how_lunch.util.lunch_mate.LunchTeam;
+
 import java.util.List;
 
 /**
@@ -28,7 +31,7 @@ public class GroupDAOImpl implements GroupDAO{
     /*랜덤그룹생성 - 인원수(int), 일수(int), 팀원수(int)*/
     @Override
     public void randomGroup(int playerNumber, int days, int teamSize) {
-//        LunchMate lunchMate = new LunchMate(playerNumber, days, teamSize);
-//        List<LunchTeam> teams = lunchMate.generateTeams();
+        LunchMate lunchMate = new LunchMate(playerNumber, days, teamSize);
+        List<LunchTeam> teams = lunchMate.generateTeams();
     }
 }

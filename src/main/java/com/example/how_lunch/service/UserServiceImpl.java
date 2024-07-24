@@ -4,6 +4,8 @@ import com.example.how_lunch.dao.UserDAO;
 import com.example.how_lunch.dao.UserDAOImpl;
 import com.example.how_lunch.model.Users;
 
+import java.util.Map;
+
 /**
  * 최초생성 2024.07.22 - 김재근
  *
@@ -18,7 +20,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean login(String email, String password) {
+    public Map<String, String> login(String email, String password) {
         return userDAO.login(email, password);
     }
 

@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -21,7 +23,6 @@ public class UserDAOImpl implements UserDAO {
     /*가입 - 이름(String), 이메일(String), 비밀번호(String)*/
     @Override
     public void newUser(Users user) {
-        System.out.println("New user");
         Connection conn = DBUtil.getConnection();
         String sql = "insert into users (username, email, password) value (?, ?, ?)";
         try {
@@ -38,38 +39,38 @@ public class UserDAOImpl implements UserDAO {
 
     /*로그인 - 이메일(String), 비밀번호(String)*/
     @Override
-    public boolean login(String email, String password) {
-        System.out.println("Login");
+    public Map<String, String> login(String email, String password) {
+
+        Map<String, String> result = new HashMap<>();
 
         Connection conn = DBUtil.getConnection();
-        String sql = "select password from users where email = ?";
+        String sql = "select password, userId from users where email = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             String p = "";
+            String u = "";
             while (rs.next()) {
                 p = rs.getString("password");
+                u = rs.getString("userId");
             }
             if (BCrypt.checkpw(password, p)) {
-                System.out.println(password);
-                System.out.println(p);
-                System.out.println("Login success");
-                return true;
+                result.put("success", "true");
+                result.put("userId", u);
+                return result;
             }
         } catch (SQLException e) {
-            System.out.println("Login failed");
             e.printStackTrace();
         } finally {
             DBUtil.closeConnection();
         }
-        return false;
+        return null;
     }
 
     /*비밀번호 변경 - 이메일(String), 기존비밀번호(String), 새비밀번호(String)*/
     @Override
     public int changePassword(String email, String cPassword, String nPassword) {
-        System.out.println("Change Password");
         int result = 0;
 
         Connection conn = DBUtil.getConnection();

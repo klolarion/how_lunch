@@ -1,6 +1,6 @@
 package com.example.how_lunch.service;
 
-import org.groom.io.how_lunch.LunchTeam;
+import com.example.how_lunch.util.lunch_mate.LunchTeam;
 
 import java.util.List;
 
