@@ -7,10 +7,6 @@
     <title>Withdraw</title>
 </head>
 <body>
-<%
-  String accountNumber = request.getParameter("accountNumber");
-  String balance = request.getParameter("balance");
-%>
 
 <h1>Withdraw</h1>
 <p>My account : ${accountNumber}</p><br>

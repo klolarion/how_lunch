@@ -7,22 +7,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 최초생성 2024.07.22 - 김재근
- *
- * */
+ * 페이징 추가 2024.07.23 - 김재근
+ */
 
 public class TransactionDAOImpl implements TransactionDAO {
 
     /*이체 - 금액(double), 내계좌번호(String), 상대계좌번호(String)*/
     @Override
     public int transfer(long userId, double amount, String myAccountNum, String targetAccountNum) {
-        System.out.println("Make transfer");
 
         Connection conn = DBUtil.getConnection();
 
@@ -45,11 +42,11 @@ public class TransactionDAOImpl implements TransactionDAO {
             ps1.setString(2, myAccountNum);
             result1 = ps1.executeUpdate();
 
-            if(result1 == 1) {
+            if (result1 == 1) {
                 ps2.setDouble(1, amount);
                 ps2.setString(2, targetAccountNum);
                 result2 = ps2.executeUpdate();
-                if(result2 == 1) {
+                if (result2 == 1) {
                     result3 = regTransaction(userId, type, amount, myAccountNum, targetAccountNum, conn);
                 }
             }
@@ -64,7 +61,6 @@ public class TransactionDAOImpl implements TransactionDAO {
     /*출금 - 금액(double), 내계좌번호(String)*/
     @Override
     public int withdraw(long userId, String accountNumber, double amount) {
-        System.out.println("Withdraw");
 
         int result1 = 0;
         boolean result2 = false;
@@ -80,7 +76,7 @@ public class TransactionDAOImpl implements TransactionDAO {
             ps.setDouble(1, amount);
             ps.setString(2, accountNumber);
             result1 = ps.executeUpdate();
-            if(result1 == 1){
+            if (result1 == 1) {
                 result2 = regTransaction(userId, type, amount, accountNumber, null, conn);
             }
         } catch (SQLException e) {
@@ -93,7 +89,6 @@ public class TransactionDAOImpl implements TransactionDAO {
     /*입금 - 금액(double), 내계좌번호(String)*/
     @Override
     public int deposit(long userId, String accountNumber, double amount) {
-        System.out.println("Deposit");
 
         int result1 = 0;
         boolean result2 = false;
@@ -107,7 +102,7 @@ public class TransactionDAOImpl implements TransactionDAO {
             ps.setDouble(1, amount);
             ps.setString(2, accountNumber);
             result1 = ps.executeUpdate();
-            if(result1 == 1){
+            if (result1 == 1) {
                 result2 = regTransaction(userId, type, amount, accountNumber, null, conn);
             }
         } catch (SQLException e) {
@@ -120,17 +115,21 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     /*계좌 거래목록 조회 - 내계좌번호(String)*/
     @Override
-    public List<Transaction> getAccountTransactions(long userId, String accountNumber) {
-        System.out.println("Get account transactions");
+    public List<Transaction> getAccountTransactions(long userId, String accountNumber, int page, int pageSize, String order) {
         List<Transaction> result = new ArrayList<>();
+        String sql = "SELECT * FROM transactions WHERE userId = ? AND mainAccount = ? or targetAccount = ? ORDER BY regDate desc LIMIT ? OFFSET ?;";
+        if(order.equals("asc")){
+            sql = "SELECT * FROM transactions WHERE userId = ? AND mainAccount = ? or targetAccount = ? ORDER BY regDate asc LIMIT ? OFFSET ?;";
+        }
 
         Connection conn = DBUtil.getConnection();
-        String sql = "select * from transactions where userId = ? and mainAccount = ? or targetAccount = ? order by regDate desc";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setLong(1, userId);
             ps.setString(2, accountNumber);
             ps.setString(3, accountNumber);
+            ps.setInt(4, pageSize);
+            ps.setInt(5, (page - 1) * pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Transaction transaction = new Transaction();
@@ -155,42 +154,120 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     /*내 거래목록 전체 조회 - 유저아이디(long)*/
     @Override
-    public List<Transaction> getMyAllTransactions(long userId) {
-        System.out.println("Get my all transactions");
-        List<Transaction> result = new ArrayList<>();
+    public List<Transaction> getMyAllTransactions(long userId, int page, int pageSize, String order) {
+//        List<Transaction> result = new ArrayList<>();
+//
+//        Connection conn = DBUtil.getConnection();
+//        String sql = "select * from transactions where userId = ? order by regDate desc";
+//        try {
+//            PreparedStatement ps = conn.prepareStatement(sql);
+//            ps.setLong(1, userId);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                Transaction transaction = new Transaction();
+//                transaction.setTransactionId(rs.getLong("transactionId"));
+//                transaction.setType(rs.getString("type"));
+//                transaction.setAmount(rs.getDouble("amount"));
+//                transaction.setMainAccount(rs.getString("mainAccount"));
+//                transaction.setTargetAccount(rs.getString("targetAccount"));
+//                transaction.setRegDate(rs.getTimestamp("regDate").toLocalDateTime());
+//
+//                result.add(transaction);
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        DBUtil.closeConnection();
+//
+//        return result;
 
+        List<Transaction> transactions = new ArrayList<>();
         Connection conn = DBUtil.getConnection();
-        String sql = "select * from transactions where userId = ? order by regDate desc";
+
+        String query = "SELECT * FROM transactions WHERE userId = ? ORDER BY regDate DESC LIMIT ? OFFSET ?;";
+        if(order.equals("asc")){
+            query = "SELECT * FROM transactions WHERE userId = ? ORDER BY regDate ASC LIMIT ? OFFSET ?";
+        }
+
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(query);
+
             ps.setLong(1, userId);
+            ps.setInt(2, pageSize);
+            ps.setInt(3, (page - 1) * pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Transaction transaction = new Transaction();
                 transaction.setTransactionId(rs.getLong("transactionId"));
+                transaction.setUserId(rs.getLong("userId"));
                 transaction.setType(rs.getString("type"));
                 transaction.setAmount(rs.getDouble("amount"));
                 transaction.setMainAccount(rs.getString("mainAccount"));
                 transaction.setTargetAccount(rs.getString("targetAccount"));
                 transaction.setRegDate(rs.getTimestamp("regDate").toLocalDateTime());
-
-                result.add(transaction);
+                transactions.add(transaction);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        DBUtil.closeConnection();
+        return transactions;
+    }
 
-        System.out.println(result.size());
-        return result;
+
+    @Override
+    public int getMyTransactionCount(long userId) {
+        int count = 0;
+        String query = "SELECT COUNT(*) FROM transactions WHERE userId = ?";
+
+        Connection conn = DBUtil.getConnection();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setLong(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
+    @Override
+    public int getAccountTransactionCount(long userId, String accountNumber) {
+        int count = 0;
+        String query = "SELECT COUNT(*) FROM transactions WHERE userId = ? AND mainAccount = ? or targetAccount = ?";
+
+        Connection conn = DBUtil.getConnection();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setLong(1, userId);
+            ps.setString(2, accountNumber);
+            ps.setString(3, accountNumber);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return count;
     }
 
 
     /*거래등록 - 거래타입(String), 금액(double), 내계좌번호(String), 상대계좌번호(String), DB연결객체(Conenction)*/
     public boolean regTransaction(long userId, String type, double amount, String mainAccountNum, String targetAccountNum, Connection conn) throws SQLException {
 
-        System.out.println("Reg transaction");
 
         boolean result = false;
 
@@ -204,7 +281,7 @@ public class TransactionDAOImpl implements TransactionDAO {
             ps3.setDouble(2, amount);
             ps3.setString(3, mainAccountNum);
             ps3.setString(4, targetAccountNum);
-            ps3.setLong(5,userId);
+            ps3.setLong(5, userId);
             result = ps3.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

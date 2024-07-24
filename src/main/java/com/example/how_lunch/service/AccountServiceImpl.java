@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 최초생성 2024.07.22 - 김재근
- *
+ * 페이징 추가 2024.07.23 - 김재근
  * */
 
 public class AccountServiceImpl implements AccountService{
@@ -34,12 +34,22 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public List<Transaction> getAccountTransactions(long userId, String accountNumber) {
-        return transactionDAO.getAccountTransactions(userId, accountNumber);
+    public List<Transaction> getAccountTransactions(long userId, String accountNumber, int page, int pageSize, String order) {
+        return transactionDAO.getAccountTransactions(userId, accountNumber, page, pageSize, order);
     }
     @Override
-    public List<Transaction> getMyAllTransactions(long userId) {
-        return transactionDAO.getMyAllTransactions(userId);
+    public List<Transaction> getMyAllTransactions(long userId, int page, int pageSize, String order) {
+        return transactionDAO.getMyAllTransactions(userId, page, pageSize, order);
+    }
+
+    @Override
+    public int getMyTransactionCount(long userId) {
+        return transactionDAO.getMyTransactionCount(userId);
+    }
+
+    @Override
+    public int getAccountTransactionCount(long userId, String accountNumber) {
+        return transactionDAO.getAccountTransactionCount(userId, accountNumber);
     }
 
 

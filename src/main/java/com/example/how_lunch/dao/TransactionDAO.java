@@ -16,8 +16,11 @@ public interface TransactionDAO {
 
     int deposit(long userId, String accountNumber, double amount);
 
-    List<Transaction> getAccountTransactions(long usrId, String accountNumber);
-    List<Transaction> getMyAllTransactions(long userId);
+    List<Transaction> getAccountTransactions(long usrId, String accountNumber, int page, int pageSize, String order);
+    List<Transaction> getMyAllTransactions(long userId, int page, int pageSize, String order);
 
 
+    int getMyTransactionCount(long userId);
+
+    int getAccountTransactionCount(long userId, String accountNumber);
 }

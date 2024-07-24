@@ -7,10 +7,6 @@
     <title>Transfer</title>
 </head>
 <body>
-<%
-  String accountNumber = request.getParameter("accountNumber");
-  String balance = request.getParameter("balance");
-%>
 <h1>Transfer</h1>
 <p>My account : ${accountNumber}</p><br>
 <p>Current balance : ${balance}</p>

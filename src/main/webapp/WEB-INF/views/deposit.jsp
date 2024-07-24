@@ -7,10 +7,6 @@
     <title>Deposit</title>
 </head>
 <body>
-<%
-    String accountNumber = request.getParameter("accountNumber");
-    String balance = request.getParameter("balance");
-%>
 
 <h1>Deposit</h1>
 <p>My account : ${accountNumber}</p>

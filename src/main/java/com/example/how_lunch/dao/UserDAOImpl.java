@@ -1,5 +1,6 @@
 package com.example.how_lunch.dao;
 
+import com.example.how_lunch.model.Users;
 import com.example.how_lunch.util.DBUtil;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -19,17 +20,17 @@ public class UserDAOImpl implements UserDAO {
 
     /*가입 - 이름(String), 이메일(String), 비밀번호(String)*/
     @Override
-    public void newUser(String username, String email, String password) {
+    public void newUser(Users user) {
         System.out.println("New user");
         Connection conn = DBUtil.getConnection();
         String sql = "insert into users (username, email, password) value (?, ?, ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, username);
-            ps.setString(2, email);
-            ps.setString(3, BCrypt.hashpw(password, BCrypt.gensalt(8)));
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(8)));
             ps.execute();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         DBUtil.closeConnection();
@@ -37,7 +38,7 @@ public class UserDAOImpl implements UserDAO {
 
     /*로그인 - 이메일(String), 비밀번호(String)*/
     @Override
-    public void login(String email, String password) {
+    public boolean login(String email, String password) {
         System.out.println("Login");
 
         Connection conn = DBUtil.getConnection();
@@ -46,19 +47,23 @@ public class UserDAOImpl implements UserDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            String p = rs.getString("password");
-
-            if(BCrypt.checkpw(password, p)){
-                System.out.println("Login success");
-                //세션 및 쿠키관리 추가필요
+            String p = "";
+            while (rs.next()) {
+                p = rs.getString("password");
             }
-
-
-        }catch (SQLException e){
+            if (BCrypt.checkpw(password, p)) {
+                System.out.println(password);
+                System.out.println(p);
+                System.out.println("Login success");
+                return true;
+            }
+        } catch (SQLException e) {
             System.out.println("Login failed");
             e.printStackTrace();
+        } finally {
+            DBUtil.closeConnection();
         }
-        DBUtil.closeConnection();
+        return false;
     }
 
     /*비밀번호 변경 - 이메일(String), 기존비밀번호(String), 새비밀번호(String)*/
@@ -77,12 +82,12 @@ public class UserDAOImpl implements UserDAO {
             ps1.setString(1, email);
             ResultSet rs1 = ps1.executeQuery();
             String sPassword = rs1.getString("password");
-            if(BCrypt.checkpw(cPassword, sPassword)){
+            if (BCrypt.checkpw(cPassword, sPassword)) {
                 ps2.setString(1, nPassword);
                 ps2.setString(2, email);
                 result = ps2.executeUpdate();
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         DBUtil.closeConnection();

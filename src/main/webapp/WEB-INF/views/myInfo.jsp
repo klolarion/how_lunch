@@ -1,12 +1,14 @@
 
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ include file="taglib.jsp"%>
+<%@ include file="header.jsp"%>
 <html>
 <head>
     <title>My info</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<%@ include file="header.jsp"%>
+
 
 <h1>My info</h1>
 <p>Name : ${username}</p>
@@ -20,7 +22,7 @@
     <c:forEach var="account" items="${accounts}">
         <tr>
             <td>
-                <a href="${pageContext.request.contextPath}/bank/view?path=accountView&accountNumber=${account.accountNumber}">${account.accountNumber}</a>
+                <a href="${pageContext.request.contextPath}/account?accountNumber=${account.accountNumber}">${account.accountNumber}</a>
             </td>
             <td>${account.balance}</td>
             <td>
@@ -47,7 +49,7 @@
         <th>Amount</th>
         <th>Main account</th>
         <th>Target account</th>
-        <th>Date</th>
+        <th><a href="${pageContext.request.contextPath}/bank?accountNumber=${accountNumber}&order=asc">^</a> Date <a href="${pageContext.request.contextPath}/bank?accountNumber=${accountNumber}&order=desc">v</a></th>
 
     </tr>
     <c:forEach var="transaction" items="${transactions}">
@@ -60,6 +62,18 @@
         </tr>
     </c:forEach>
 </table>
+<div>
+    <c:forEach var="i" begin="1" end="${totalPages}">
+        <c:choose>
+            <c:when test="${i == currentPage}">
+                <strong>${i}</strong>
+            </c:when>
+            <c:otherwise>
+                <a href="/bank?userId=${userId}&page=${i}">${i}</a>
+            </c:otherwise>
+        </c:choose>
+    </c:forEach>
+</div>
 
 </body>
 </html>

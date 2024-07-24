@@ -3,16 +3,18 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>Register</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f7f7f7;
         }
+
         .header {
             padding: 10px;
         }
+
         .main {
             flex: 1;
             display: flex;
@@ -20,7 +22,8 @@
             align-items: center;
             margin: 100px auto;
         }
-        .login-container {
+
+        .register-container {
             width: 100%;
             max-width: 400px; /* Increased max-width */
             padding: 20px;
@@ -29,16 +32,19 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             box-sizing: border-box; /* Ensure padding is included in width */
         }
-        .login-container h2 {
+
+        .register-container h2 {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .form-group {
             display: flex;
             flex-direction: column; /* Align items vertically */
             gap: 10px;
             margin-bottom: 20px;
         }
+
         .btn-custom {
             width: 30%;
             background-color: #6c757d; /* Primary color for both buttons */
@@ -50,9 +56,11 @@
             cursor: pointer;
             text-decoration: none; /* For anchor tag */
         }
+
         .btn-custom:hover {
             background-color: #5a6268; /* Darker shade for hover effect */
         }
+
         .btn-group {
             display: flex;
             gap: 10px;
@@ -64,18 +72,18 @@
 <div class="header">
     <%@ include file="header.jsp" %>
 </div>
-
 <div class="main">
-    <div class="login-container">
-        <h2>Login</h2>
-        <form action="${pageContext.request.contextPath}/user/doLogin" method="post">
+    <div class="register-container">
+        <h2>Register</h2>
+        <form action="${pageContext.request.contextPath}/user/doRegister" method="post">
             <div class="form-group">
+                <input type="text" class="form-control" placeholder="Enter name" id="username" name="username" required>
                 <input type="email" class="form-control" placeholder="Enter email" id="email" name="email" required>
                 <input type="password" class="form-control" placeholder="Enter password" id="password" name="password" required>
             </div>
             <div class="btn-group">
-                <button type="submit" value="Login" class="btn btn-custom">로그인</button>
-                <a href="${pageContext.request.contextPath}/user/register" class="btn btn-secondary btn-custom">회원가입</a>
+                <button type="submit" value="Register" class="btn btn-custom">회원가입</button>
+                <a href="${pageContext.request.contextPath}/user/login" class="btn btn-secondary btn-custom">로그인</a>
             </div>
         </form>
     </div>

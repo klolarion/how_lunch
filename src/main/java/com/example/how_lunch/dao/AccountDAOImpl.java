@@ -20,7 +20,6 @@ public class AccountDAOImpl implements AccountDAO{
     /*내 계좌 조회 - 유저아이디(long)*/
     @Override
     public List<UserInfoDto> getAllAccounts(long userId) {
-        System.out.println("Account list");
         List<UserInfoDto> accounts = new ArrayList<>();
 
         Connection conn = DBUtil.getConnection();
@@ -46,7 +45,6 @@ public class AccountDAOImpl implements AccountDAO{
 
     @Override
     public UserInfoDto getAccount(long userId, String accountNumber) {
-        System.out.println("Get account");
         UserInfoDto info = new UserInfoDto();
 
         Connection conn = DBUtil.getConnection();
@@ -72,7 +70,6 @@ public class AccountDAOImpl implements AccountDAO{
     /*계좌추가 - 유저아이디(long), 계좌번호(String)*/
     @Override
     public void newAccount(long userId, String accountNumber) {
-        System.out.println("New account");
         Connection conn = DBUtil.getConnection();
         String sql = "insert into accounts (accountNumber, userId) value (?, ?)";
         try {

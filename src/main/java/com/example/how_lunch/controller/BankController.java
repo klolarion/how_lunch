@@ -17,31 +17,48 @@ import java.util.List;
 
 /**
  * 최초생성 2024.07.22 - 김재근
- *
+ * 계좌상세페이지 분리, 페이징 추가 2024.07.23 김재근
  * */
 
 @WebServlet("/bank/*")
 public class BankController extends HttpServlet {
 
     private final String BASEPATH = "/WEB-INF/views";
+
+    private static final int PAGE_SIZE = 10;
     private AccountService accountService = new AccountServiceImpl();
     private BankService bankService = new BankServiceImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("doGet");
         String path = req.getParameter("path");
 
+        String o = req.getParameter("order");
+        String order = "desc";
+        if(o != null) {
+            order = o;
+        }
+
         if (path == null) {
-            System.out.println("list");
             long userId = 1L;
+            int page = 1;
+            String p = req.getParameter("page");
+            if(p != null) {
+                page = Integer.parseInt(p);
+            }
+
             List<UserInfoDto> accounts = accountService.getAllAccounts(userId);
-            List<Transaction> transactions = accountService.getMyAllTransactions(userId);
+            List<Transaction> transactions = accountService.getMyAllTransactions(userId, page, PAGE_SIZE, order);
+            int totalTransactions = accountService.getMyTransactionCount(userId);
+            int totalPages = (int) Math.ceil((double) totalTransactions / PAGE_SIZE);
 
 
+            req.setAttribute("userId", userId);
             req.setAttribute("accounts", accounts);
             req.setAttribute("username", accounts.get(0).getUsername());
 
             req.setAttribute("transactions", transactions);
+            req.setAttribute("currentPage", page);
+            req.setAttribute("totalPages", totalPages);
 
 
             req.getRequestDispatcher(BASEPATH + "/myInfo.jsp").forward(req, resp);
@@ -49,7 +66,6 @@ public class BankController extends HttpServlet {
             String accountNumber = req.getParameter("accountNumber");
             String balance = req.getParameter("balance");
 
-            System.out.println("deposit");
             req.setAttribute("accountNumber", accountNumber);
             req.setAttribute("balance", balance);
             req.getRequestDispatcher(BASEPATH + "/deposit.jsp").forward(req, resp);
@@ -57,40 +73,26 @@ public class BankController extends HttpServlet {
             String accountNumber = req.getParameter("accountNumber");
             String balance = req.getParameter("balance");
 
-            System.out.println("withdraw");
             req.setAttribute("accountNumber", accountNumber);
             req.setAttribute("balance", balance);
             req.getRequestDispatcher(BASEPATH + "/withdraw.jsp").forward(req, resp);
         }else if(path.equals("transfer")) {
+
             String accountNumber = req.getParameter("accountNumber");
             String balance = req.getParameter("balance");
 
-            System.out.println("transfer");
             req.setAttribute("accountNumber", accountNumber);
             req.setAttribute("balance", balance);
             req.getRequestDispatcher(BASEPATH + "/transfer.jsp").forward(req, resp);
-        }else if(path.equals("accountView")) {
-            String accountNumber = req.getParameter("accountNumber");
-
-            long userId = 1L;
-            UserInfoDto account = accountService.getAccount(userId, accountNumber);
-            List<Transaction> transactions = accountService.getAccountTransactions(userId, accountNumber);
-
-            System.out.println("accountView");
-            req.setAttribute("account", account);
-            req.setAttribute("transactions", transactions);
-            req.getRequestDispatcher(BASEPATH + "/accountView.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        System.out.println("doPost");
         String path = req.getParameter("path");
 
 
         if(path.equals("doDeposit")){
-            System.out.println("doDeposit");
             String accountNumber = req.getParameter("accountNumber");
             String amount = req.getParameter("amount");
             req.setAttribute("accountNumber", accountNumber);
@@ -99,8 +101,6 @@ public class BankController extends HttpServlet {
             bankService.deposit(userId, accountNumber, Double.parseDouble(amount));
             resp.sendRedirect("/bank");
         } else if(path.equals("doWithdraw")){
-            System.out.println("doWithdraw");
-
             String accountNumber = req.getParameter("accountNumber");
 
             String amount = req.getParameter("amount");
@@ -110,7 +110,6 @@ public class BankController extends HttpServlet {
             bankService.withdraw(userId, accountNumber, Double.parseDouble(amount));
             resp.sendRedirect("/bank");
         }else if(path.equals("doTransfer")){
-            System.out.println("doTransfer");
 
             double amount = Double.parseDouble(req.getParameter("amount"));
             String myAccountNum = req.getParameter("myAccountNum");
